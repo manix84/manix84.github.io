@@ -1,5 +1,6 @@
 {
-  "name": "manix84.github.io",
+  "name": "manix84.github.io", 
+  "homepage": "https://manix84.github.io",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
