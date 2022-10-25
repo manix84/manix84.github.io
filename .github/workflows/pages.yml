@@ -33,7 +33,9 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
+          name: github-pages
           path: build/
+          if-no-files-found: warn
         
   deploy:
     runs-on: ubuntu-latest
