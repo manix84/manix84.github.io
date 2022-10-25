@@ -1,6 +1,10 @@
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 
-export const App = () => (
+const Home = () => <h2>Home</h2>;
+const About = () => <h2>About</h2>;
+const Users = () => <h2>Users</h2>;
+
+const App = () => (
   <Router>
     <div>
       <nav>
@@ -20,22 +24,12 @@ export const App = () => (
       {/* A <Routes> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
       <Routes>
-        <Route path='/about'>
-          <About />
-        </Route>
-        <Route path='/users'>
-          <Users />
-        </Route>
-        <Route path='/'>
-          <Home />
-        </Route>
+        <Route path='/about' element={<About />} />
+        <Route path='/users' element={<Users />} />
+        <Route path='/' element={<Home />} />
       </Routes>
     </div>
   </Router>
 );
 
 export default App;
-
-const Home = () => <h2>Home</h2>;
-const About = () => <h2>About</h2>;
-const Users = () => <h2>Users</h2>;
