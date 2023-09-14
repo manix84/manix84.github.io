@@ -4,7 +4,7 @@ import st from "./Background.module.scss";
 const Background = () => {
   const elementRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    window.onpointermove = (event) => {
+    const pointerMove = (event: PointerEvent) => {
       const { clientX, clientY } = event;
 
       (elementRef.current as HTMLDivElement).animate(
@@ -15,6 +15,8 @@ const Background = () => {
         { duration: 3000, fill: "forwards" }
       );
     };
+    window.addEventListener("pointermove", pointerMove);
+    return () => window.removeEventListener("pointermove", pointerMove);
   }, []);
 
   return (
