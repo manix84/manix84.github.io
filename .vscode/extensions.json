@@ -1,0 +1,6 @@
+{
+  "recommendations": [
+    "mikestead.dotenv", // DotENV
+    "styled-components.vscode-styled-components" // Styled Components
+  ]
+}
