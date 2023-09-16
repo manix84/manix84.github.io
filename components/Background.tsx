@@ -9,8 +9,8 @@ const Background = () => {
 
       (elementRef.current as HTMLDivElement).animate(
         {
-          left: `${clientX}px`,
-          top: `${clientY}px`,
+          left: `${clientX + scrollX}px`,
+          top: `${clientY + scrollY}px`,
         },
         { duration: 3000, fill: "forwards" }
       );
