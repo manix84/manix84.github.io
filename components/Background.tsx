@@ -9,10 +9,10 @@ const Background = () => {
 
       (elementRef.current as HTMLDivElement).animate(
         {
-          left: `${clientX + scrollX}px`,
-          top: `${clientY + scrollY}px`,
+          left: `${clientX}px`,
+          top: `${clientY}px`,
         },
-        { duration: 3000, fill: "forwards" }
+        { duration: 7000, fill: "forwards" }
       );
     };
     window.addEventListener("pointermove", pointerMove);
@@ -21,8 +21,10 @@ const Background = () => {
 
   return (
     <>
-      <div className={st.overlay} />
-      <div className={st.element} ref={elementRef} />
+      <div className={st.container}>
+        <div className={st.overlay} />
+        <div className={st.element} ref={elementRef} />
+      </div>
     </>
   );
 };
