@@ -10,7 +10,7 @@ const Home = () => (
     </Head>
 
     <main className={st.main}>
-      <h1 className={st.title}>Hi, I`m Rob, and I`m a nerd.</h1>
+      <h1 className={st.title}>Hi, I&apos;m Rob, and I&apos;m a nerd.</h1>
     </main>
   </div>
 );
