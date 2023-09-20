@@ -1,0 +1,312 @@
+@import "../styles/_utils.scss";
+
+$ROTATION_STOPPED: 0deg;
+$ROTATION_PLAYING_START: 24deg;
+$ROTATION_PLAYING_END: 43deg;
+$ARM_LIFT_ANGLE: 15deg;
+$ARM_DROP_ANGLE: 0deg;
+$ARM_STEP_SEC: 0.8s;
+$ROTATION_SPEED_SEC: unquote("#{toFixed(60 / 33)}s"); // RPMs: 78/45/33
+$ROTATION_DURATION: 23s;
+$CENTER_IMG_PCT: 33%;
+
+@function pctCalc(
+  $durationSecs: $ROTATION_DURATION,
+  $desiredSecs: 1,
+  $reversed: false
+) {
+  $pct: "#{calc(($desiredSecs / $durationSecs) * 100)}%";
+  @if ($reversed) {
+    $pct: "#{calc(100 - (($desiredSecs / $durationSecs) * 100))}%";
+  }
+  @debug "$pct: #{pct}";
+  @return unquote($pct);
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  align-items: flex-start;
+  height: 800px;
+  width: 1000px;
+}
+
+.deck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 75px;
+  overflow: hidden;
+}
+
+.plinth {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  width: 750px;
+  height: 750px;
+  margin: 25px;
+
+  // ${mediumScreenAndBelow(css`
+  //   scale: 115%;
+  // `)}
+}
+
+.turnTable {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  // scale: 85%;
+  [data-state="playing"] & {
+    animation-name: rotateRunningDisc;
+    animation-duration: $ROTATION_SPEED_SEC;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-play-state: running;
+  }
+  [data-state="ended"] & {
+    animation-name: rotateEndingDisc;
+    animation-duration: $ROTATION_SPEED_SEC;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+    animation-play-state: running;
+  }
+}
+
+.discContainer {
+  display: flex;
+  justify-content: center;
+  line-height: 0;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  height: 85%;
+  width: 85%;
+}
+
+.platter {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.disc {
+  height: auto;
+  width: auto;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.label {
+  position: absolute;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  overflow: hidden;
+
+  border-radius: 100%;
+  aspect-ratio: 1 / 1;
+
+  // Annoying Next/Image style overrides
+  height: $CENTER_IMG_PCT !important;
+  max-height: $CENTER_IMG_PCT !important;
+  min-height: $CENTER_IMG_PCT !important;
+  width: $CENTER_IMG_PCT !important;
+  max-width: $CENTER_IMG_PCT !important;
+  min-width: $CENTER_IMG_PCT !important;
+}
+
+.spindle {
+  position: absolute;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  height: 2.5%;
+  width: 2.5%;
+  background-color: rgb(255, 255, 255);
+  background-image: radial-gradient(circle at 0 0, #bcc6cc, #eee, #bcc6cc);
+  border-radius: 100%;
+
+  [data-state="playing"] & {
+    animation-name: rotateRunningDisc;
+    animation-direction: reverse;
+    animation-duration: $ROTATION_SPEED_SEC;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+  [data-state="ended"] & {
+    animation-name: rotateEndingDisc;
+    animation-direction: reverse;
+    animation-duration: $ROTATION_SPEED_SEC;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+  }
+}
+
+.arm {
+  position: absolute;
+  top: 5%;
+  right: -10%;
+  height: 75%;
+  width: 13%;
+  transform-origin: center 23.53%;
+  transform: rotate3d(1, 0, 0, 0deg) rotate($ROTATION_STOPPED);
+  animation-play-state: running;
+  [data-state="playing"] &,
+  [data-state="paused"] & {
+    animation: armMove $ROTATION_DURATION forwards 1;
+  }
+  [data-state="ended"] & {
+    transform: rotate3d(1, 0, 0, $ARM_DROP_ANGLE) rotate($ROTATION_PLAYING_END);
+    animation: armStopping 4s forwards 1;
+  }
+  [data-state="paused"] & {
+    animation-play-state: paused;
+  }
+}
+
+.controls {
+  position: absolute;
+  bottom: 75px;
+  right: 50px;
+  height: 50px;
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.buttons {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  padding: 10px 10px;
+  text-shadow: 0px -1px 0px rgba(100, 100, 100, 0.4);
+  text-decoration: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 1),
+    0px 1px 3px rgba(0, 0, 0, 0.3);
+  outline: none;
+  border: 1px solid #ba6;
+
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.5),
+    0px 1px 3px rgba(0, 0, 0, 0.3);
+  border-color: #111;
+  color: #bbb;
+  background-image: -webkit-repeating-linear-gradient(
+      45deg,
+      hsla(0, 0%, 100%, 0) 0%,
+      hsla(0, 0%, 100%, 0) 6%,
+      hsla(0, 0%, 100%, 0.1) 7.5%
+    ),
+    -webkit-repeating-linear-gradient(45deg, hsla(0, 0%, 0%, 0) 0%, hsla(
+            0,
+            0%,
+            0%,
+            0
+          )
+          4%, hsla(0, 0%, 0%, 0.03) 4.5%),
+    -webkit-repeating-linear-gradient(45deg, hsla(0, 0%, 100%, 0) 0%, hsla(
+            0,
+            0%,
+            100%,
+            0
+          )
+          1.2%, hsla(0, 0%, 100%, 0.15) 2.2%),
+    linear-gradient(
+      45deg,
+      hsl(0, 0%, 0%) 0%,
+      hsl(0, 0%, 10%) 47%,
+      hsl(0, 0%, 0%) 53%,
+      hsl(0, 0%, 10%) 100%
+    );
+
+  &:not(:disabled):active {
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
+  }
+  &:disabled {
+    color: #555;
+    cursor: default;
+  }
+  .play {
+    margin-right: -2px;
+  }
+  svg {
+    height: 15px;
+    width: 15px;
+  }
+}
+
+@keyframes rotateRunningDisc {
+  to {
+    transform: rotate(360deg);
+  }
+}
+// duplicated to force an animation
+@keyframes rotateEndingDisc {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes armMove {
+  0% {
+    transform: rotate3d(1, 0, 0, $ARM_DROP_ANGLE) rotate($ROTATION_STOPPED);
+  }
+  #{pctCalc($ROTATION_DURATION, calc(1 * $ARM_STEP_SEC))} {
+    transform: rotate3d(1, 0, 0, $ARM_LIFT_ANGLE) rotate($ROTATION_STOPPED);
+  }
+  #{pctCalc($ROTATION_DURATION, calc(2 * $ARM_STEP_SEC))} {
+    transform: rotate3d(1, 0, 0, $ARM_LIFT_ANGLE)
+      rotate($ROTATION_PLAYING_START);
+  }
+  #{pctCalc($ROTATION_DURATION, calc(3 * $ARM_STEP_SEC))} {
+    animation-timing-function: cubic-bezier(0.25, 0.25, 0.805, 0.325);
+    transform: rotate3d(1, 0, 0, $ARM_DROP_ANGLE)
+      rotate($ROTATION_PLAYING_START);
+  }
+  100% {
+    animation-timing-function: linear;
+    transform: rotate3d(1, 0, 0, $ARM_DROP_ANGLE) rotate($ROTATION_PLAYING_END);
+  }
+}
+
+@keyframes armStopping {
+  0% {
+    transform: rotate3d(1, 0, 0, $ARM_DROP_ANGLE) rotate($ROTATION_PLAYING_END);
+  }
+  #{pctCalc(3s, calc(2 * $ARM_STEP_SEC), true)} {
+    transform: rotate3d(1, 0, 0, $ARM_LIFT_ANGLE) rotate($ROTATION_PLAYING_END);
+  }
+  #{pctCalc(3s, calc(1 * $ARM_STEP_SEC), true)} {
+    transform: rotate3d(1, 0, 0, $ARM_LIFT_ANGLE) rotate($ROTATION_STOPPED);
+  }
+  100% {
+    transform: rotate3d(1, 0, 0, $ARM_DROP_ANGLE) rotate($ROTATION_STOPPED);
+  }
+}

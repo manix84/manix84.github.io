@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="608" height="608" fill="none" viewBox="0 0 608 608">
+  <g clip-path="url(#a)">
+    <path fill="#fff" stroke="#000" stroke-width="16.138" d="M597.094 302.393c0 162.072-131.832 293.504-294.512 293.504-162.681 0-294.513-131.432-294.513-293.504C8.069 140.32 139.9 8.888 302.582 8.888c162.68 0 294.512 131.432 294.512 293.505Z"/>
+    <circle cx="303.59" cy="304.41" r="303.59" fill="url(#b)" fill-opacity=".95"/>
+    <ellipse cx="302.582" cy="302.393" stroke="url(#c)" stroke-width="1.513" rx="203.738" ry="202.73"/>
+    <ellipse cx="302.581" cy="302.393" stroke="url(#d)" stroke-width="1.513" rx="187.601" ry="186.592"/>
+    <ellipse cx="302.582" cy="302.393" stroke="url(#e)" stroke-width="1.513" rx="236.014" ry="235.005"/>
+    <ellipse cx="302.582" cy="302.393" stroke="url(#f)" stroke-width="1.513" rx="270.306" ry="269.298"/>
+    <ellipse cx="302.582" cy="302.393" stroke="#fff" stroke-opacity=".1" stroke-width="1.513" rx="288.461" ry="287.452"/>
+    <ellipse cx="302.582" cy="302.393" stroke="#fff" stroke-opacity=".1" stroke-width="1.513" rx="129.101" ry="128.093"/>
+    <ellipse cx="302.582" cy="302.393" fill="url(#g)" rx="129.101" ry="128.093"/>
+    <path stroke="url(#h)" stroke-linecap="round" stroke-opacity=".1" stroke-width="4.034" d="M476.062 302.393c0-95.254-77.67-172.472-173.48-172.472m0 344.943c-95.811 0-173.48-77.218-173.48-172.471"/>
+    <path stroke="url(#i)" stroke-linecap="round" stroke-opacity=".1" stroke-width="4.034" d="M522.457 302.392c0-120.877-98.442-218.867-219.876-218.867m0 437.735c-121.434 0-219.876-97.99-219.876-218.868"/>
+    <path stroke="url(#j)" stroke-linecap="round" stroke-opacity=".1" stroke-width="4.034" d="M554.732 303.401c0-139.259-113.344-252.151-253.16-252.151m0 504.302c-139.816 0-253.16-112.892-253.16-252.151"/>
+  </g>
+  <defs>
+    <linearGradient id="b" x1="303.59" x2="303.59" y1=".82" y2="608" gradientUnits="userSpaceOnUse">
+      <stop offset=".255"/>
+      <stop offset=".51" stop-color="#121212"/>
+      <stop offset=".755"/>
+    </linearGradient>
+    <linearGradient id="c" x1="302.582" x2="302.582" y1="99.663" y2="505.122" gradientUnits="userSpaceOnUse">
+      <stop/>
+      <stop offset="1" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="d" x1="302.581" x2="302.581" y1="115.801" y2="488.984" gradientUnits="userSpaceOnUse">
+      <stop/>
+      <stop offset="1" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="e" x1="302.582" x2="302.582" y1="67.388" y2="537.398" gradientUnits="userSpaceOnUse">
+      <stop/>
+      <stop offset="1" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="f" x1="302.582" x2="302.582" y1="33.095" y2="571.69" gradientUnits="userSpaceOnUse">
+      <stop/>
+      <stop offset="1" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="g" x1="302.582" x2="302.582" y1="174.3" y2="430.485" gradientUnits="userSpaceOnUse">
+      <stop/>
+      <stop offset=".469" stop-opacity=".21"/>
+      <stop offset="1"/>
+    </linearGradient>
+    <radialGradient id="h" cx="0" cy="0" r="1" gradientTransform="matrix(0 172.471 -173.48 0 302.582 302.393)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".5"/>
+    </radialGradient>
+    <radialGradient id="i" cx="0" cy="0" r="1" gradientTransform="matrix(0 218.867 -219.876 0 302.581 302.392)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".5"/>
+    </radialGradient>
+    <radialGradient id="j" cx="0" cy="0" r="1" gradientTransform="matrix(0 252.151 -253.16 0 301.572 303.401)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".5"/>
+    </radialGradient>
+    <clipPath id="a">
+      <rect width="607.18" height="607.18" fill="#fff" transform="translate(0 .82)"/>
+    </clipPath>
+  </defs>
+</svg>
