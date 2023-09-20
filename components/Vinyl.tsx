@@ -1,13 +1,13 @@
 import classNames from "classnames";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import ArmImg from "../public/examples/Vinyl/arm.svg";
-import PauseButton from "../public/examples/Vinyl/pause.svg";
-import PlayButton from "../public/examples/Vinyl/play.svg";
-import StopButton from "../public/examples/Vinyl/stop.svg";
+import ArmImg from "../public/examples/vinyl/arm.svg";
 import PlatterImg from "../public/examples/vinyl/base.svg";
 import DeckImg from "../public/examples/vinyl/deck.svg";
 import DiscImg from "../public/examples/vinyl/disc.svg";
+import PauseButton from "../public/examples/vinyl/pause.svg";
+import PlayButton from "../public/examples/vinyl/play.svg";
+import StopButton from "../public/examples/vinyl/stop.svg";
 import st from "./Vinyl.module.scss";
 
 export const IMAGE_SIZES =
