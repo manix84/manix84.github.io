@@ -55,9 +55,8 @@ $CENTER_IMG_PCT: 33%;
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  width: 750px;
-  height: 750px;
-  margin: 25px;
+  width: 80%;
+  height: 100%;
 
   // ${mediumScreenAndBelow(css`
   //   scale: 115%;
@@ -147,6 +146,7 @@ $CENTER_IMG_PCT: 33%;
   background-color: rgb(255, 255, 255);
   background-image: radial-gradient(circle at 0 0, #bcc6cc, #eee, #bcc6cc);
   border-radius: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.5);
 
   [data-state="playing"] & {
     animation-name: rotateRunningDisc;
@@ -244,10 +244,9 @@ $CENTER_IMG_PCT: 33%;
       hsl(0, 0%, 0%) 53%,
       hsl(0, 0%, 10%) 100%
     );
-
+  line-height: 15px;
   &:not(:disabled):active {
-    -webkit-transform: translateY(2px);
-    transform: translateY(2px);
+    scale: 90%;
   }
   &:disabled {
     color: #555;
