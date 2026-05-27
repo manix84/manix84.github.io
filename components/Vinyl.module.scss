@@ -128,7 +128,6 @@ $CENTER_IMG_PCT: 33%;
   border-radius: 100%;
   aspect-ratio: 1 / 1;
 
-  // Annoying Next/Image style overrides
   height: $CENTER_IMG_PCT !important;
   max-height: $CENTER_IMG_PCT !important;
   min-height: $CENTER_IMG_PCT !important;
@@ -256,10 +255,19 @@ $CENTER_IMG_PCT: 33%;
   .play {
     margin-right: -2px;
   }
-  svg {
+  img {
     height: 15px;
     width: 15px;
   }
+}
+
+.deck img,
+.platter img,
+.disc img,
+.arm img {
+  display: block;
+  height: 100%;
+  width: 100%;
 }
 
 @keyframes rotateRunningDisc {

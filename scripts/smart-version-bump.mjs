@@ -130,12 +130,12 @@ function classifyChange(changes) {
       /^(components|layout|pages|styles|utils)\/.+\.(ts|tsx|css|scss)$/.test(path)
   );
   const touchesRuntimeCode = paths.some((path) =>
-    /^(components|layout|pages|styles|utils)\//.test(path)
+    /^(components|layout|pages|src|styles|utils)\//.test(path)
   );
   const touchesAssets = paths.some((path) => /^public\//.test(path));
   const touchesBuildOrDependencies = paths.some((path) =>
     [
-      "next.config.js",
+      "vite.config.ts",
       "package.json",
       "package-lock.json",
       "tsconfig.json",

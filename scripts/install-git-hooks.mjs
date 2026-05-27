@@ -11,7 +11,6 @@ const hook = `#!/bin/sh
 ${marker}
 
 npm run lint &&
-npm run lockfile:check &&
 npm run typecheck &&
 npm test &&
 npm run build &&

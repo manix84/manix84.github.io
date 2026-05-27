@@ -1,12 +1,12 @@
 {
   "name": "manix84.github.io",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "private": true,
   "packageManager": "npm@10.9.8",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build --webpack",
-    "start": "next start",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
     "lint": "eslint .",
     "lockfile:check": "npm ci --dry-run",
     "typecheck": "tsc --noEmit",
@@ -15,20 +15,24 @@
     "hooks:install": "node scripts/install-git-hooks.mjs"
   },
   "dependencies": {
-    "@svgr/webpack": "^8.1.0",
     "classnames": "^2.5.1",
-    "next": "^16.2.6",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "sass": "^1.100.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
     "@types/node": "^20.19.41",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.6",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
     "typescript": "^6.0.3",
+    "typescript-eslint": "^8.60.0",
+    "vite": "^8.0.14",
     "vitest": "^4.1.7"
   }
 }

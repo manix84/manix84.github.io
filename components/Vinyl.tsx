@@ -1,17 +1,8 @@
 import classNames from "classnames";
-import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import ArmImg from "../public/examples/vinyl/arm.svg";
-import PlatterImg from "../public/examples/vinyl/base.svg";
-import DeckImg from "../public/examples/vinyl/deck.svg";
-import DiscImg from "../public/examples/vinyl/disc.svg";
-import PauseButton from "../public/examples/vinyl/pause.svg";
-import PlayButton from "../public/examples/vinyl/play.svg";
-import StopButton from "../public/examples/vinyl/stop.svg";
 import st from "./Vinyl.module.scss";
 
-export const IMAGE_SIZES =
-  "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw";
+const VINYL_ASSET_BASE = "/examples/vinyl";
 
 export type PlaybackState = "idle" | "paused" | "playing" | "ended";
 
@@ -35,6 +26,13 @@ export const Vinyl: React.FC<VinylProps> = ({ src, state = "idle" }) => {
       }
     };
   }, [playbackDuration, playbackState]);
+
+  useEffect(() => {
+    // Keep the existing public state prop behavior while this component remains uncontrolled internally.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPlaybackState(state);
+  }, [state]);
+
   const handlePlay = () => {
     if (playbackState !== "playing") {
       setPlaybackState("playing");
@@ -60,25 +58,24 @@ export const Vinyl: React.FC<VinylProps> = ({ src, state = "idle" }) => {
       data-duration={playbackDuration}
     >
       <div className={st.deck}>
-        <DeckImg />
+        <img src={`${VINYL_ASSET_BASE}/deck.svg`} alt="" />
       </div>
       <div className={st.plinth}>
         <div className={st.turnTable}>
           <div className={st.platter}>
-            <PlatterImg />
+            <img src={`${VINYL_ASSET_BASE}/base.svg`} alt="" />
           </div>
           <div className={st.discContainer}>
             <div className={st.disc}>
-              <DiscImg />
+              <img src={`${VINYL_ASSET_BASE}/disc.svg`} alt="" />
             </div>
             <div className={st.label}>
-              <Image
-                fill
-                sizes={IMAGE_SIZES}
+              <img
                 alt=""
                 src={src}
-                quality={100}
                 style={{
+                  height: "100%",
+                  width: "100%",
                   objectFit: "cover",
                   objectPosition: "center",
                 }}
@@ -88,7 +85,7 @@ export const Vinyl: React.FC<VinylProps> = ({ src, state = "idle" }) => {
           </div>
         </div>
         <div className={st.arm}>
-          <ArmImg />
+          <img src={`${VINYL_ASSET_BASE}/arm.svg`} alt="" />
         </div>
       </div>
       <div className={st.controls}>
@@ -97,21 +94,21 @@ export const Vinyl: React.FC<VinylProps> = ({ src, state = "idle" }) => {
           disabled={playbackState === "playing"}
           className={classNames(st.buttons, st.play)}
         >
-          <PlayButton />
+          <img src={`${VINYL_ASSET_BASE}/play.svg`} alt="" />
         </button>
         <button
           onClick={handlePause}
           disabled={playbackState !== "playing"}
           className={classNames(st.buttons, st.pause)}
         >
-          <PauseButton />
+          <img src={`${VINYL_ASSET_BASE}/pause.svg`} alt="" />
         </button>
         <button
           onClick={handleStop}
           disabled={playbackState !== "playing"}
           className={classNames(st.buttons, st.stop)}
         >
-          <StopButton />
+          <img src={`${VINYL_ASSET_BASE}/stop.svg`} alt="" />
         </button>
       </div>
     </div>
