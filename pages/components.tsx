@@ -8,7 +8,7 @@ const Components = () => (
     </Head>
     <h1>Component Examples</h1>
     <h2>Vinyl Record Player</h2>
-    <Vinyl src="/examples/Vinyl/cover.jpeg" />
+    <Vinyl src="/examples/vinyl/cover.jpeg" />
   </div>
 );
 export default Components;

@@ -1,4 +1,5 @@
 module.exports = {
+  output: "export",
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
@@ -27,7 +28,6 @@ module.exports = {
     return config;
   },
   reactStrictMode: true,
-  swcMinify: true,
   images: {
     unoptimized: true,
   },

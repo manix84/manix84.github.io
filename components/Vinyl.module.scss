@@ -1,4 +1,6 @@
-@import "../styles/_utils.scss";
+@use "sass:math";
+@use "sass:string";
+@use "../styles/utils";
 
 $ROTATION_STOPPED: 0deg;
 $ROTATION_PLAYING_START: 24deg;
@@ -6,7 +8,7 @@ $ROTATION_PLAYING_END: 43deg;
 $ARM_LIFT_ANGLE: 15deg;
 $ARM_DROP_ANGLE: 0deg;
 $ARM_STEP_SEC: 0.8s;
-$ROTATION_SPEED_SEC: unquote("#{toFixed(60 / 33)}s"); // RPMs: 78/45/33
+$ROTATION_SPEED_SEC: string.unquote("#{utils.toFixed(math.div(60, 33))}s"); // RPMs: 78/45/33
 $ROTATION_DURATION: 23s;
 $CENTER_IMG_PCT: 33%;
 
@@ -19,8 +21,7 @@ $CENTER_IMG_PCT: 33%;
   @if ($reversed) {
     $pct: "#{calc(100 - (($desiredSecs / $durationSecs) * 100))}%";
   }
-  @debug "$pct: #{pct}";
-  @return unquote($pct);
+  @return string.unquote($pct);
 }
 
 .container {

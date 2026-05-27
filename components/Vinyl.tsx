@@ -23,30 +23,30 @@ interface VinylProps {
 export const Vinyl: React.FC<VinylProps> = ({ src, state = "idle" }) => {
   const [playbackState, setPlaybackState] = useState<PlaybackState>(state);
   const [playbackDuration, setPlaybackDuration] = useState<number>(0);
-  const playbackTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const playbackTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (playbackDuration <= 0) return;
     playbackTimeout.current = setTimeout(() => {
       setPlaybackState("ended");
     }, playbackDuration * 1000);
-    return () => clearTimeout(playbackTimeout.current);
+    return () => {
+      if (playbackTimeout.current) {
+        clearTimeout(playbackTimeout.current);
+      }
+    };
   }, [playbackDuration, playbackState]);
-  useEffect(() => {
-    setPlaybackState(state);
-  }, [state]);
-
-  const handlePlay = (e: React.MouseEvent) => {
+  const handlePlay = () => {
     if (playbackState !== "playing") {
       setPlaybackState("playing");
       setPlaybackDuration(23);
     }
   };
-  const handlePause = (e: React.MouseEvent) => {
+  const handlePause = () => {
     if (playbackState === "playing") {
       setPlaybackState("paused");
     }
   };
-  const handleStop = (e: React.MouseEvent) => {
+  const handleStop = () => {
     if (playbackState !== "ended") {
       setPlaybackState("ended");
       setPlaybackDuration(0);

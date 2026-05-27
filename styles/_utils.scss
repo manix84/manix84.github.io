@@ -5,6 +5,8 @@
  * @param {Number} $digits [2] - Number of digits to leave
  * @return {Number}
 */
+@use "sass:math";
+
 @function toFixed($float, $digits: 2) {
   $sass-precision: 5;
 
@@ -14,6 +16,6 @@
     + "See https://github.com/sass/sass/issues/1122 for further informations.";
   }
 
-  $pow: pow(10, $digits);
-  @return round($float * $pow) / $pow;
+  $pow: math.pow(10, $digits);
+  @return math.div(math.round($float * $pow), $pow);
 }
