@@ -1,12 +1,14 @@
 {
   "name": "manix84.github.io",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
+  "packageManager": "npm@10.9.8",
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
+    "lockfile:check": "npm ci --dry-run",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "version:bump": "node scripts/smart-version-bump.mjs",
