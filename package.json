@@ -1,6 +1,6 @@
 {
   "name": "manix84.github.io",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "version:bump": "node scripts/smart-version-bump.mjs",
+    "hooks:install": "node scripts/install-git-hooks.mjs"
   },
   "dependencies": {
     "@svgr/webpack": "^8.1.0",
