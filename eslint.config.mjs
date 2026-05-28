@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import globals from "globals";
@@ -37,11 +38,16 @@ const eslintConfig = [
       },
     },
     plugins: {
+      react,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      "react/jsx-curly-brace-presence": [
+        "error",
+        { props: "always", children: "never" },
+      ],
       "react-hooks/exhaustive-deps": "off",
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     },

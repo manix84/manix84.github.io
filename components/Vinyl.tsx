@@ -3,75 +3,100 @@ import React, { useEffect, useRef, useState } from "react";
 import st from "./Vinyl.module.scss";
 
 const VINYL_ASSET_BASE = "/examples/vinyl";
+const DEFAULT_PLAYBACK_DURATION = 23;
 
 export type PlaybackState = "idle" | "paused" | "playing" | "ended";
 
 interface VinylProps {
   src: string;
   state?: PlaybackState;
+  duration?: number;
+  onStateChange?: (state: PlaybackState) => void;
 }
 
-export const Vinyl: React.FC<VinylProps> = ({ src, state = "idle" }) => {
+export const Vinyl: React.FC<VinylProps> = ({
+  src,
+  state = "idle",
+  duration = DEFAULT_PLAYBACK_DURATION,
+  onStateChange,
+}) => {
   const [playbackState, setPlaybackState] = useState<PlaybackState>(state);
   const [playbackDuration, setPlaybackDuration] = useState<number>(0);
   const playbackTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const updatePlaybackState = (
+    nextState: PlaybackState,
+    nextDuration = playbackDuration,
+  ) => {
+    setPlaybackState(nextState);
+    setPlaybackDuration(nextDuration);
+    onStateChange?.(nextState);
+  };
+
   useEffect(() => {
-    if (playbackDuration <= 0) return;
+    if (playbackState !== "playing" || playbackDuration <= 0) return;
+
     playbackTimeout.current = setTimeout(() => {
       setPlaybackState("ended");
+      setPlaybackDuration(0);
+      onStateChange?.("ended");
     }, playbackDuration * 1000);
+
     return () => {
       if (playbackTimeout.current) {
         clearTimeout(playbackTimeout.current);
       }
     };
-  }, [playbackDuration, playbackState]);
+  }, [onStateChange, playbackDuration, playbackState]);
 
   useEffect(() => {
     // Keep the existing public state prop behavior while this component remains uncontrolled internally.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPlaybackState(state);
+    if (state !== "playing") {
+      setPlaybackDuration(0);
+    }
   }, [state]);
 
   const handlePlay = () => {
     if (playbackState !== "playing") {
-      setPlaybackState("playing");
-      setPlaybackDuration(23);
+      updatePlaybackState("playing", duration);
     }
   };
   const handlePause = () => {
     if (playbackState === "playing") {
-      setPlaybackState("paused");
+      updatePlaybackState("paused", 0);
     }
   };
   const handleStop = () => {
     if (playbackState !== "ended") {
-      setPlaybackState("ended");
-      setPlaybackDuration(0);
+      updatePlaybackState("ended", 0);
     }
   };
+
   return (
     <div
       className={st.container}
+      data-testid={"vinyl-player"}
       data-art={src}
       data-state={playbackState}
       data-duration={playbackDuration}
     >
       <div className={st.deck}>
-        <img src={`${VINYL_ASSET_BASE}/deck.svg`} alt="" />
+        <img src={`${VINYL_ASSET_BASE}/deck.svg`} alt={""} />
       </div>
       <div className={st.plinth}>
         <div className={st.turnTable}>
           <div className={st.platter}>
-            <img src={`${VINYL_ASSET_BASE}/base.svg`} alt="" />
+            <img src={`${VINYL_ASSET_BASE}/base.svg`} alt={""} />
           </div>
-          <div className={st.discContainer}>
+          <div className={st.discContainer} data-testid={"vinyl-disc"}>
             <div className={st.disc}>
-              <img src={`${VINYL_ASSET_BASE}/disc.svg`} alt="" />
+              <img src={`${VINYL_ASSET_BASE}/disc.svg`} alt={""} />
             </div>
             <div className={st.label}>
               <img
-                alt=""
+                alt={""}
                 src={src}
                 style={{
                   height: "100%",
@@ -83,32 +108,38 @@ export const Vinyl: React.FC<VinylProps> = ({ src, state = "idle" }) => {
             </div>
             <div className={st.spindle} />
           </div>
-        </div>
-        <div className={st.arm}>
-          <img src={`${VINYL_ASSET_BASE}/arm.svg`} alt="" />
+          <div className={st.arm} data-testid={"vinyl-arm"}>
+            <img src={`${VINYL_ASSET_BASE}/arm.svg`} alt={""} />
+          </div>
         </div>
       </div>
       <div className={st.controls}>
         <button
+          aria-label={"Play record"}
+          title={"Play"}
           onClick={handlePlay}
           disabled={playbackState === "playing"}
-          className={classNames(st.buttons, st.play)}
+          className={classNames(st.button, st.playButton)}
         >
-          <img src={`${VINYL_ASSET_BASE}/play.svg`} alt="" />
+          <img src={`${VINYL_ASSET_BASE}/play.svg`} alt={""} />
         </button>
         <button
+          aria-label={"Pause record"}
+          title={"Pause"}
           onClick={handlePause}
           disabled={playbackState !== "playing"}
-          className={classNames(st.buttons, st.pause)}
+          className={classNames(st.button, st.pauseButton)}
         >
-          <img src={`${VINYL_ASSET_BASE}/pause.svg`} alt="" />
+          <img src={`${VINYL_ASSET_BASE}/pause.svg`} alt={""} />
         </button>
         <button
+          aria-label={"Stop record"}
+          title={"Stop"}
           onClick={handleStop}
           disabled={playbackState !== "playing"}
-          className={classNames(st.buttons, st.stop)}
+          className={classNames(st.button, st.stopButton)}
         >
-          <img src={`${VINYL_ASSET_BASE}/stop.svg`} alt="" />
+          <img src={`${VINYL_ASSET_BASE}/stop.svg`} alt={""} />
         </button>
       </div>
     </div>

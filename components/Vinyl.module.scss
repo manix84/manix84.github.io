@@ -2,15 +2,14 @@
 @use "sass:string";
 @use "../styles/utils";
 
-$ROTATION_STOPPED: 0deg;
-$ROTATION_PLAYING_START: 24deg;
-$ROTATION_PLAYING_END: 43deg;
-$ARM_LIFT_ANGLE: 15deg;
+$ROTATION_STOPPED: -6deg;
+$ROTATION_PLAYING_START: 21deg;
+$ROTATION_PLAYING_END: 37deg;
+$ARM_LIFT_ANGLE: 13deg;
 $ARM_DROP_ANGLE: 0deg;
 $ARM_STEP_SEC: 0.8s;
-$ROTATION_SPEED_SEC: string.unquote("#{utils.toFixed(math.div(60, 33))}s"); // RPMs: 78/45/33
+$ROTATION_SPEED_SEC: string.unquote("#{utils.toFixed(math.div(60, 33))}s");
 $ROTATION_DURATION: 23s;
-$CENTER_IMG_PCT: 33%;
 
 @function pctCalc(
   $durationSecs: $ROTATION_DURATION,
@@ -26,259 +25,360 @@ $CENTER_IMG_PCT: 33%;
 
 .container {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  box-sizing: border-box;
-  align-items: flex-start;
-  height: 800px;
-  width: 1000px;
+  width: min(100%, 920px);
+  aspect-ratio: 1.45 / 1;
+  isolation: isolate;
+  color: #f7f3e8;
 }
 
 .deck {
   position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 75px;
+  inset: 0;
   overflow: hidden;
+  border: 1px solid rgba(244, 226, 184, 0.26);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(246, 218, 151, 0.22), transparent 28%),
+    linear-gradient(135deg, #2a1913 0%, #44271c 46%, #1b1d1e 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -30px 80px rgba(0, 0, 0, 0.34),
+    0 28px 70px rgba(0, 0, 0, 0.34);
+}
+
+.deck::before {
+  position: absolute;
+  inset: 3.5%;
+  content: "";
+  border: 1px solid rgba(255, 245, 216, 0.16);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 20% 80%, rgba(0, 0, 0, 0.18)),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 18px);
+  pointer-events: none;
+}
+
+.deck::after {
+  position: absolute;
+  right: 5.5%;
+  bottom: 18%;
+  width: 32%;
+  height: 18%;
+  content: "";
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent),
+    linear-gradient(135deg, rgba(18, 20, 21, 0.8), rgba(68, 64, 55, 0.52));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  pointer-events: none;
+}
+
+.deck img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  mix-blend-mode: screen;
 }
 
 .plinth {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: center;
-  width: 80%;
-  height: 100%;
+  position: absolute;
+  inset: 6%;
+  z-index: 1;
+}
 
-  // ${mediumScreenAndBelow(css`
-  //   scale: 115%;
-  // `)}
+.plinth::before {
+  position: absolute;
+  right: 3%;
+  top: 9%;
+  width: 22%;
+  height: 32%;
+  content: "";
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.2), transparent 24%),
+    linear-gradient(145deg, #0e1112, #37383a);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 18px 30px rgba(0, 0, 0, 0.3);
 }
 
 .turnTable {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 1 / 1;
-  // scale: 85%;
-  [data-state="playing"] & {
-    animation-name: rotateRunningDisc;
-    animation-duration: $ROTATION_SPEED_SEC;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-    animation-play-state: running;
-  }
-  [data-state="ended"] & {
-    animation-name: rotateEndingDisc;
-    animation-duration: $ROTATION_SPEED_SEC;
-    animation-iteration-count: 1;
-    animation-timing-function: ease-out;
-    animation-play-state: running;
-  }
-}
-
-.discContainer {
-  display: flex;
-  justify-content: center;
-  line-height: 0;
   position: absolute;
-  transform: translate(-50%, -50%);
-  left: 50%;
+  left: 4%;
   top: 50%;
-  height: 85%;
-  width: 85%;
+  width: 62%;
+  aspect-ratio: 1 / 1;
+  transform: translateY(-50%);
+  z-index: 2;
 }
 
 .platter {
-  height: 100%;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.16) 0 3%, transparent 3.2%),
+    radial-gradient(circle at 50% 48%, #34383a 0 55%, #111416 57% 70%, #3f4548 71% 74%, #151719 76%);
+  box-shadow:
+    inset 0 0 0 10px rgba(255, 255, 255, 0.05),
+    inset 0 20px 30px rgba(255, 255, 255, 0.08),
+    inset 0 -30px 50px rgba(0, 0, 0, 0.45),
+    0 20px 34px rgba(0, 0, 0, 0.38);
+}
+
+.platter img {
+  display: block;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100%;
+  opacity: 0.32;
+  mix-blend-mode: screen;
+}
+
+.discContainer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  width: 84%;
+  aspect-ratio: 1 / 1;
+  line-height: 0;
+  transform: translate(-50%, -50%);
+
+  [data-state="playing"] & {
+    animation: rotateRunningDisc $ROTATION_SPEED_SEC linear infinite;
+  }
+
+  [data-state="ended"] & {
+    animation: rotateEndingDisc $ROTATION_SPEED_SEC ease-out 1;
+  }
+}
+
+.discContainer::before,
+.discContainer::after {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  content: "";
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.discContainer::before {
+  background:
+    radial-gradient(circle, transparent 0 18%, rgba(255, 255, 255, 0.08) 18.3% 18.7%, transparent 19%),
+    repeating-radial-gradient(circle, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 5px);
+  opacity: 0.32;
+}
+
+.discContainer::after {
+  background:
+    linear-gradient(115deg, transparent 10%, rgba(255, 255, 255, 0.18) 33%, transparent 47%),
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.16), transparent 26%);
+  mix-blend-mode: screen;
 }
 
 .disc {
-  height: auto;
-  width: auto;
-  aspect-ratio: 1 / 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #070707;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 0 80px rgba(255, 255, 255, 0.06);
+}
+
+.disc img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0.78;
 }
 
 .label {
   position: absolute;
-  display: flex;
-  align-self: center;
-  justify-self: center;
+  inset: 34%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
   overflow: hidden;
+  border: 4px solid rgba(255, 247, 225, 0.72);
+  border-radius: 50%;
+  background: #f4e2b0;
+  box-shadow:
+    0 0 0 7px rgba(16, 16, 16, 0.52),
+    inset 0 0 18px rgba(0, 0, 0, 0.26);
+}
 
-  border-radius: 100%;
-  aspect-ratio: 1 / 1;
-
-  height: $CENTER_IMG_PCT !important;
-  max-height: $CENTER_IMG_PCT !important;
-  min-height: $CENTER_IMG_PCT !important;
-  width: $CENTER_IMG_PCT !important;
-  max-width: $CENTER_IMG_PCT !important;
-  min-width: $CENTER_IMG_PCT !important;
+.label img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .spindle {
   position: absolute;
-  display: flex;
-  align-self: center;
-  justify-self: center;
-  height: 2.5%;
-  width: 2.5%;
-  background-color: rgb(255, 255, 255);
-  background-image: radial-gradient(circle at 0 0, #bcc6cc, #eee, #bcc6cc);
-  border-radius: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-
-  [data-state="playing"] & {
-    animation-name: rotateRunningDisc;
-    animation-direction: reverse;
-    animation-duration: $ROTATION_SPEED_SEC;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-  }
-  [data-state="ended"] & {
-    animation-name: rotateEndingDisc;
-    animation-direction: reverse;
-    animation-duration: $ROTATION_SPEED_SEC;
-    animation-iteration-count: 1;
-    animation-timing-function: ease-out;
-  }
+  inset: calc(50% - 2.2%);
+  z-index: 4;
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, #ffffff, #d4d8d9 36%, #7e888c 100%);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.42);
 }
 
 .arm {
   position: absolute;
-  top: 5%;
-  right: -10%;
-  height: 75%;
-  width: 13%;
-  transform-origin: center 23.53%;
+  top: -8%;
+  left: 90%;
+  z-index: 5;
+  width: auto;
+  height: 100%;
+  aspect-ratio: 107 / 561;
   transform: rotate3d(1, 0, 0, 0deg) rotate($ROTATION_STOPPED);
-  animation-play-state: running;
+  transform-origin: 50% 23.5%;
+
   [data-state="playing"] &,
   [data-state="paused"] & {
     animation: armMove $ROTATION_DURATION forwards 1;
   }
-  [data-state="ended"] & {
-    transform: rotate3d(1, 0, 0, $ARM_DROP_ANGLE) rotate($ROTATION_PLAYING_END);
-    animation: armStopping 4s forwards 1;
-  }
+
   [data-state="paused"] & {
     animation-play-state: paused;
   }
+
+  [data-state="ended"] & {
+    animation: armStopping 4s forwards 1;
+    transform: rotate3d(1, 0, 0, $ARM_DROP_ANGLE) rotate($ROTATION_PLAYING_END);
+  }
+}
+
+.arm::before {
+  position: absolute;
+  left: 50%;
+  top: 7.5%;
+  width: 185%;
+  aspect-ratio: 1 / 1;
+  content: "";
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.5), transparent 16%),
+    linear-gradient(145deg, #6e7475, #1c2022 70%);
+  box-shadow:
+    inset 0 -12px 24px rgba(0, 0, 0, 0.36),
+    0 12px 20px rgba(0, 0, 0, 0.3);
+  transform: translateX(-50%);
+}
+
+.arm img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 12px rgba(0, 0, 0, 0.42));
 }
 
 .controls {
   position: absolute;
-  bottom: 75px;
-  right: 50px;
-  height: 50px;
-  width: 250px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  right: 8%;
+  bottom: 7.5%;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: min(31%, 250px);
+  min-width: 180px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent),
+    rgba(14, 15, 15, 0.66);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 16px 28px rgba(0, 0, 0, 0.34);
 }
 
-.buttons {
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
-  padding: 10px 10px;
-  text-shadow: 0px -1px 0px rgba(100, 100, 100, 0.4);
-  text-decoration: none;
-  background: transparent;
+.button {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.24), transparent 24%),
+    linear-gradient(145deg, #34383a, #0d0f10);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 10px 18px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  position: relative;
-  display: inline-block;
-  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 1),
-    0px 1px 3px rgba(0, 0, 0, 0.3);
-  outline: none;
-  border: 1px solid #ba6;
-
-  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.5),
-    0px 1px 3px rgba(0, 0, 0, 0.3);
-  border-color: #111;
-  color: #bbb;
-  background-image: -webkit-repeating-linear-gradient(
-      45deg,
-      hsla(0, 0%, 100%, 0) 0%,
-      hsla(0, 0%, 100%, 0) 6%,
-      hsla(0, 0%, 100%, 0.1) 7.5%
-    ),
-    -webkit-repeating-linear-gradient(45deg, hsla(0, 0%, 0%, 0) 0%, hsla(
-            0,
-            0%,
-            0%,
-            0
-          )
-          4%, hsla(0, 0%, 0%, 0.03) 4.5%),
-    -webkit-repeating-linear-gradient(45deg, hsla(0, 0%, 100%, 0) 0%, hsla(
-            0,
-            0%,
-            100%,
-            0
-          )
-          1.2%, hsla(0, 0%, 100%, 0.15) 2.2%),
-    linear-gradient(
-      45deg,
-      hsl(0, 0%, 0%) 0%,
-      hsl(0, 0%, 10%) 47%,
-      hsl(0, 0%, 0%) 53%,
-      hsl(0, 0%, 10%) 100%
-    );
-  line-height: 15px;
-  &:not(:disabled):active {
-    scale: 90%;
-  }
-  &:disabled {
-    color: #555;
-    cursor: default;
-  }
-  .play {
-    margin-right: -2px;
-  }
-  img {
-    height: 15px;
-    width: 15px;
-  }
+  transition:
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    opacity 160ms ease;
 }
 
-.deck img,
-.platter img,
-.disc img,
-.arm img {
-  display: block;
-  height: 100%;
-  width: 100%;
+.button:hover:not(:disabled),
+.button:focus-visible {
+  background:
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.3), transparent 24%),
+    linear-gradient(145deg, #545b5e, #171a1b);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    0 12px 20px rgba(0, 0, 0, 0.36);
+}
+
+.button:focus-visible {
+  outline: 3px solid rgba(245, 199, 102, 0.86);
+  outline-offset: 3px;
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(2px) scale(0.96);
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: 0.42;
+}
+
+.button img {
+  width: 36%;
+  height: 36%;
+  filter: invert(1) brightness(1.5);
+}
+
+.playButton:not(:disabled) {
+  border-color: rgba(116, 219, 168, 0.5);
+}
+
+.pauseButton:not(:disabled) {
+  border-color: rgba(245, 199, 102, 0.52);
+}
+
+.stopButton:not(:disabled) {
+  border-color: rgba(239, 124, 96, 0.54);
 }
 
 @keyframes rotateRunningDisc {
   to {
-    transform: rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
-// duplicated to force an animation
+
 @keyframes rotateEndingDisc {
   to {
-    transform: rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
@@ -316,5 +416,31 @@ $CENTER_IMG_PCT: 33%;
   }
   100% {
     transform: rotate3d(1, 0, 0, $ARM_DROP_ANGLE) rotate($ROTATION_STOPPED);
+  }
+}
+
+@media (max-width: 760px) {
+  .container {
+    aspect-ratio: 0.92 / 1;
+  }
+
+  .turnTable {
+    left: 50%;
+    top: 38%;
+    width: 74%;
+    transform: translate(-50%, -50%);
+  }
+
+  .arm {
+    top: -7%;
+    left: 89%;
+    height: 96%;
+  }
+
+  .controls {
+    right: 50%;
+    bottom: 7%;
+    width: min(72%, 280px);
+    transform: translateX(50%);
   }
 }
