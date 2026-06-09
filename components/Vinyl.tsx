@@ -21,6 +21,11 @@ export const Vinyl: React.FC<VinylProps> = ({
   const [playbackState, setPlaybackState] = useState<PlaybackState>(state);
   const [playbackDuration, setPlaybackDuration] = useState<number>(0);
   const playbackTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onStateChangeRef = useRef(onStateChange);
+
+  useEffect(() => {
+    onStateChangeRef.current = onStateChange;
+  }, [onStateChange]);
 
   const updatePlaybackState = (
     nextState: PlaybackState,
@@ -28,7 +33,7 @@ export const Vinyl: React.FC<VinylProps> = ({
   ) => {
     setPlaybackState(nextState);
     setPlaybackDuration(nextDuration);
-    onStateChange?.(nextState);
+    onStateChangeRef.current?.(nextState);
   };
 
   useEffect(() => {
@@ -37,7 +42,7 @@ export const Vinyl: React.FC<VinylProps> = ({
     playbackTimeout.current = setTimeout(() => {
       setPlaybackState("ended");
       setPlaybackDuration(0);
-      onStateChange?.("ended");
+      onStateChangeRef.current?.("ended");
     }, playbackDuration * 1000);
 
     return () => {
@@ -45,7 +50,7 @@ export const Vinyl: React.FC<VinylProps> = ({
         clearTimeout(playbackTimeout.current);
       }
     };
-  }, [onStateChange, playbackDuration, playbackState]);
+  }, [playbackDuration, playbackState]);
 
   useEffect(() => {
     setPlaybackState(state);
@@ -104,9 +109,9 @@ export const Vinyl: React.FC<VinylProps> = ({
             </div>
             <div className={st.spindle} />
           </div>
-          <div className={st.arm} data-testid="vinyl-arm">
-            <img src={`${VINYL_ASSET_BASE}/arm.svg`} alt="" />
-          </div>
+        </div>
+        <div className={st.arm} data-testid="vinyl-arm">
+          <img src={`${VINYL_ASSET_BASE}/arm.svg`} alt="" />
         </div>
       </div>
       <div className={st.controls}>
