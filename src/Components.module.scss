@@ -1,0 +1,127 @@
+.components {
+  width: min(100%, 1180px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 64px 24px 80px;
+  color: #10252b;
+}
+
+.showcase {
+  display: grid;
+  gap: 28px;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 440px);
+  gap: 28px;
+  align-items: end;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: #83d0c2;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0;
+  color: #10252b;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  line-height: 0.95;
+}
+
+.intro {
+  margin: 0;
+  color: #384b52;
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+.demoGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 22px;
+  align-items: start;
+}
+
+.playerStage,
+.panel {
+  border: 1px solid rgba(244, 226, 184, 0.22);
+  border-radius: 8px;
+  background: rgba(13, 22, 25, 0.78);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.18);
+}
+
+.playerStage {
+  display: grid;
+  min-width: 0;
+  place-items: center;
+  padding: 22px;
+}
+
+.panel {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+}
+
+.statusRow {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.statusRow span {
+  color: #aac5bf;
+  font-size: 0.8rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.statusRow strong {
+  color: #fff2bd;
+}
+
+.stateGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.stateButton {
+  min-height: 44px;
+  border: 1px solid rgba(244, 226, 184, 0.24);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #f7f3e8;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.stateButton[data-active="true"] {
+  border-color: #83d0c2;
+  background: rgba(131, 208, 194, 0.2);
+}
+
+@media (max-width: 900px) {
+  .header,
+  .demoGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .components {
+    padding: 40px 16px 64px;
+  }
+
+  .playerStage,
+  .panel {
+    padding: 16px;
+  }
+}

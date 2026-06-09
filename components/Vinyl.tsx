@@ -1,84 +1,107 @@
 import classNames from "classnames";
-import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import ArmImg from "../public/examples/vinyl/arm.svg";
-import PlatterImg from "../public/examples/vinyl/base.svg";
-import DeckImg from "../public/examples/vinyl/deck.svg";
-import DiscImg from "../public/examples/vinyl/disc.svg";
-import PauseButton from "../public/examples/vinyl/pause.svg";
-import PlayButton from "../public/examples/vinyl/play.svg";
-import StopButton from "../public/examples/vinyl/stop.svg";
 import st from "./Vinyl.module.scss";
 
-export const IMAGE_SIZES =
-  "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw";
+const VINYL_ASSET_BASE = "/examples/vinyl";
+const DEFAULT_PLAYBACK_DURATION = 23;
 
 export type PlaybackState = "idle" | "paused" | "playing" | "ended";
 
 interface VinylProps {
   src: string;
   state?: PlaybackState;
+  onStateChange?: (state: PlaybackState) => void;
 }
 
-export const Vinyl: React.FC<VinylProps> = ({ src, state = "idle" }) => {
+export const Vinyl: React.FC<VinylProps> = ({
+  src,
+  state = "idle",
+  onStateChange,
+}) => {
   const [playbackState, setPlaybackState] = useState<PlaybackState>(state);
   const [playbackDuration, setPlaybackDuration] = useState<number>(0);
-  const playbackTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const playbackTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onStateChangeRef = useRef(onStateChange);
+
   useEffect(() => {
-    if (playbackDuration <= 0) return;
+    onStateChangeRef.current = onStateChange;
+  }, [onStateChange]);
+
+  const updatePlaybackState = (
+    nextState: PlaybackState,
+    nextDuration = playbackDuration,
+  ) => {
+    setPlaybackState(nextState);
+    setPlaybackDuration(nextDuration);
+    onStateChangeRef.current?.(nextState);
+  };
+
+  useEffect(() => {
+    if (playbackState !== "playing" || playbackDuration <= 0) return;
+
     playbackTimeout.current = setTimeout(() => {
       setPlaybackState("ended");
+      setPlaybackDuration(0);
+      onStateChangeRef.current?.("ended");
     }, playbackDuration * 1000);
-    return () => clearTimeout(playbackTimeout.current);
+
+    return () => {
+      if (playbackTimeout.current) {
+        clearTimeout(playbackTimeout.current);
+      }
+    };
   }, [playbackDuration, playbackState]);
+
   useEffect(() => {
     setPlaybackState(state);
+    setPlaybackDuration(state === "playing" ? DEFAULT_PLAYBACK_DURATION : 0);
   }, [state]);
 
-  const handlePlay = (e: React.MouseEvent) => {
+  const handlePlay = () => {
     if (playbackState !== "playing") {
-      setPlaybackState("playing");
-      setPlaybackDuration(23);
+      updatePlaybackState("playing", DEFAULT_PLAYBACK_DURATION);
     }
   };
-  const handlePause = (e: React.MouseEvent) => {
+
+  const handlePause = () => {
     if (playbackState === "playing") {
-      setPlaybackState("paused");
+      updatePlaybackState("paused", 0);
     }
   };
-  const handleStop = (e: React.MouseEvent) => {
+
+  const handleStop = () => {
     if (playbackState !== "ended") {
-      setPlaybackState("ended");
-      setPlaybackDuration(0);
+      updatePlaybackState("ended", 0);
     }
   };
+
   return (
     <div
       className={st.container}
+      data-testid="vinyl-player"
       data-art={src}
       data-state={playbackState}
       data-duration={playbackDuration}
     >
       <div className={st.deck}>
-        <DeckImg />
+        <img src={`${VINYL_ASSET_BASE}/deck.svg`} alt="" />
       </div>
       <div className={st.plinth}>
         <div className={st.turnTable}>
           <div className={st.platter}>
-            <PlatterImg />
+            <img src={`${VINYL_ASSET_BASE}/base.svg`} alt="" />
           </div>
-          <div className={st.discContainer}>
+          <div className={st.discContainer} data-testid="vinyl-disc">
             <div className={st.disc}>
-              <DiscImg />
+              <img src={`${VINYL_ASSET_BASE}/disc.svg`} alt="" />
             </div>
             <div className={st.label}>
-              <Image
-                fill
-                sizes={IMAGE_SIZES}
-                alt=""
+              <img
                 src={src}
-                quality={100}
+                alt=""
                 style={{
+                  height: "100%",
+                  width: "100%",
                   objectFit: "cover",
                   objectPosition: "center",
                 }}
@@ -87,31 +110,37 @@ export const Vinyl: React.FC<VinylProps> = ({ src, state = "idle" }) => {
             <div className={st.spindle} />
           </div>
         </div>
-        <div className={st.arm}>
-          <ArmImg />
+        <div className={st.arm} data-testid="vinyl-arm">
+          <img src={`${VINYL_ASSET_BASE}/arm.svg`} alt="" />
         </div>
       </div>
       <div className={st.controls}>
         <button
+          aria-label="Play record"
+          title="Play"
           onClick={handlePlay}
           disabled={playbackState === "playing"}
           className={classNames(st.buttons, st.play)}
         >
-          <PlayButton />
+          <img src={`${VINYL_ASSET_BASE}/play.svg`} alt="" />
         </button>
         <button
+          aria-label="Pause record"
+          title="Pause"
           onClick={handlePause}
           disabled={playbackState !== "playing"}
-          className={classNames(st.buttons, st.pause)}
+          className={st.buttons}
         >
-          <PauseButton />
+          <img src={`${VINYL_ASSET_BASE}/pause.svg`} alt="" />
         </button>
         <button
+          aria-label="Stop record"
+          title="Stop"
           onClick={handleStop}
           disabled={playbackState !== "playing"}
-          className={classNames(st.buttons, st.stop)}
+          className={st.buttons}
         >
-          <StopButton />
+          <img src={`${VINYL_ASSET_BASE}/stop.svg`} alt="" />
         </button>
       </div>
     </div>
