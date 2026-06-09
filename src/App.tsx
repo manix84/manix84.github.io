@@ -76,13 +76,13 @@ const compactProjects = [
 const experience = [
   {
     company: "CleeAI",
-    role: "Front End Web Developer",
+    role: "Lead Full-Stack Engineer",
     detail:
-      "Built AI product interfaces, insight reporting, embeddable chatbots, and research search experiences with a focus on transparent source-backed results.",
+      "Lead full-stack product work across AI interfaces, insight reporting, embeddable chatbots, and research search experiences, with a strong front-end focus and transparent source-backed results.",
   },
   {
     company: "Amazon Prime Video",
-    role: "Digital Video UI",
+    role: "Senior front-end and UI systems",
     detail:
       "Worked on the Lovefilm to Amazon Video transition and reusable component systems powering Prime Video UI across product surfaces.",
   },
@@ -102,12 +102,12 @@ const experience = [
 
 const Home = () => {
   useEffect(() => {
-    document.title = "Rob Taylor | Front End Developer";
+    document.title = "Rob Taylor | Lead Full-Stack Engineer";
     document
       .querySelector('meta[name="description"]')
       ?.setAttribute(
         "content",
-        "Front end developer portfolio for Rob Taylor, showing professional experience and selected personal projects.",
+        "Lead full-stack engineer portfolio for Rob Taylor, showing professional experience, front-end depth, and selected personal projects.",
       );
   }, []);
 
@@ -116,12 +116,13 @@ const Home = () => {
       <section className={st.hero}>
         <div className={st.heroCopy}>
           <p className={st.eyebrow}>Rob Taylor / manix84</p>
-          <h1>Front end engineer for useful, polished web products.</h1>
+          <h1>Lead full-stack engineer with deep front-end focus.</h1>
           <p className={st.lede}>
-            I have spent 25+ years building for the web, from BBC iPlayer and
-            Prime Video UI systems to privacy-first tools, AI product
-            interfaces, browser games, and tiny utilities that solve real
-            problems.
+            I have spent 25+ years building for the web, growing from hands-on
+            front-end specialist into lead and head-level full-stack roles
+            across BBC iPlayer, Prime Video UI systems, AI products,
+            privacy-first tools, browser games, and small utilities that solve
+            real problems.
           </p>
           <div className={st.actions}>
             <a href="#projects" className={st.primaryAction}>
@@ -141,11 +142,11 @@ const Home = () => {
         <div className={st.heroPanel} aria-label="Portfolio highlights">
           <div className={st.metric}>
             <span>25+</span>
-            <p>years building web interfaces</p>
+            <p>years building web products and interfaces</p>
           </div>
           <div className={st.metric}>
             <span>9</span>
-            <p>years on Amazon Prime Video</p>
+            <p>years on Prime Video UI systems</p>
           </div>
           <div className={st.metric}>
             <span>3.75</span>
@@ -155,7 +156,7 @@ const Home = () => {
             <p>Current focus</p>
             <ul>
               <li>AI tools with transparent user value</li>
-              <li>Clean, dependency-conscious front-end systems</li>
+              <li>Full-stack product delivery with front-end depth</li>
               <li>Privacy-first utilities with no account friction</li>
             </ul>
           </div>
@@ -253,11 +254,11 @@ const Home = () => {
       <section className={st.section}>
         <div className={st.sectionHeader}>
           <p className={st.eyebrow}>Professional experience</p>
-          <h2>Product teams, component systems, and public-facing scale.</h2>
+          <h2>Technical leadership, product teams, and public-facing scale.</h2>
           <p>
             The project work sits alongside long-running professional experience
-            in entertainment, AI products, service portals, and component
-            libraries.
+            leading and building across entertainment, AI products, service
+            portals, full-stack systems, and front-end component libraries.
           </p>
         </div>
 
