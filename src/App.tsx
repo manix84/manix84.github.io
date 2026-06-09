@@ -5,6 +5,16 @@ import Footer from "../layout/Footer";
 import st from "./App.module.css";
 import componentsStyles from "./Components.module.scss";
 
+type ThemePreference = "light" | "dark" | "auto";
+
+const themePreferences: ThemePreference[] = ["light", "dark", "auto"];
+const themeLabels: Record<ThemePreference, string> = {
+  light: "Light",
+  dark: "Dark",
+  auto: "Auto",
+};
+const themeStorageKey = "manix84-theme";
+
 const featuredProjects = [
   {
     title: "Time Pilot",
@@ -99,6 +109,40 @@ const experience = [
       "Built customer portals, fan product experiences, and early social web games, covering both product delivery and experimental interactive work.",
   },
 ];
+
+const getSystemTheme = () =>
+  window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+const getStoredThemePreference = (): ThemePreference => {
+  const storedTheme = window.localStorage.getItem(themeStorageKey);
+
+  return storedTheme === "light" || storedTheme === "dark"
+    ? storedTheme
+    : "auto";
+};
+
+const ThemeSwitcher = ({
+  themePreference,
+  onThemeChange,
+}: {
+  themePreference: ThemePreference;
+  onThemeChange: (theme: ThemePreference) => void;
+}) => (
+  <div className={st.themeSwitcher} aria-label="Theme selection" role="group">
+    {themePreferences.map((theme) => (
+      <button
+        key={theme}
+        type="button"
+        aria-pressed={themePreference === theme}
+        className={st.themeButton}
+        data-active={themePreference === theme}
+        onClick={() => onThemeChange(theme)}
+      >
+        {themeLabels[theme]}
+      </button>
+    ))}
+  </div>
+);
 
 const Home = () => {
   useEffect(() => {
@@ -381,11 +425,60 @@ const getRoute = () => {
 };
 
 const App = () => (
-  <>
-    <Background />
-    {getRoute() === "components" ? <Components /> : <Home />}
-    <Footer />
-  </>
+  <ThemedApp />
 );
+
+const ThemedApp = () => {
+  const [themePreference, setThemePreference] = useState<ThemePreference>(() =>
+    getStoredThemePreference(),
+  );
+
+  useEffect(() => {
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const applyTheme = () => {
+      const resolvedTheme =
+        themePreference === "auto" ? getSystemTheme() : themePreference;
+
+      document.documentElement.dataset.theme = resolvedTheme;
+      document.documentElement.dataset.themePreference = themePreference;
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute(
+          "content",
+          resolvedTheme === "dark" ? "#10252b" : "#8cb095",
+        );
+    };
+
+    applyTheme();
+    systemTheme.addEventListener("change", applyTheme);
+
+    return () => {
+      systemTheme.removeEventListener("change", applyTheme);
+    };
+  }, [themePreference]);
+
+  const handleThemeChange = (nextTheme: ThemePreference) => {
+    setThemePreference(nextTheme);
+
+    if (nextTheme === "auto") {
+      window.localStorage.removeItem(themeStorageKey);
+    } else {
+      window.localStorage.setItem(themeStorageKey, nextTheme);
+    }
+  };
+
+  return (
+    <>
+      <Background />
+      <ThemeSwitcher
+        themePreference={themePreference}
+        onThemeChange={handleThemeChange}
+      />
+      {getRoute() === "components" ? <Components /> : <Home />}
+      <Footer />
+    </>
+  );
+};
 
 export default App;
