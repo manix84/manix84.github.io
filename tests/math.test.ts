@@ -1,7 +1,11 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { getRandomInt } from "../utils/math";
 
 describe("getRandomInt", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("returns an integer inside the lower-inclusive upper-exclusive range", () => {
     vi.spyOn(Math, "random").mockReturnValue(0.5);
 

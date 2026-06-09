@@ -10,14 +10,12 @@ export type PlaybackState = "idle" | "paused" | "playing" | "ended";
 interface VinylProps {
   src: string;
   state?: PlaybackState;
-  duration?: number;
   onStateChange?: (state: PlaybackState) => void;
 }
 
 export const Vinyl: React.FC<VinylProps> = ({
   src,
   state = "idle",
-  duration = DEFAULT_PLAYBACK_DURATION,
   onStateChange,
 }) => {
   const [playbackState, setPlaybackState] = useState<PlaybackState>(state);
@@ -51,14 +49,12 @@ export const Vinyl: React.FC<VinylProps> = ({
 
   useEffect(() => {
     setPlaybackState(state);
-    if (state !== "playing") {
-      setPlaybackDuration(0);
-    }
+    setPlaybackDuration(state === "playing" ? DEFAULT_PLAYBACK_DURATION : 0);
   }, [state]);
 
   const handlePlay = () => {
     if (playbackState !== "playing") {
-      updatePlaybackState("playing", duration);
+      updatePlaybackState("playing", DEFAULT_PLAYBACK_DURATION);
     }
   };
 
