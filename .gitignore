@@ -7,13 +7,16 @@
 
 # testing
 /coverage
+/playwright-report
+/test-results
 
-# next.js
+# framework output
 /.next/
 /out/
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store

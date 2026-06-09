@@ -1,12 +1,10 @@
-@import "../styles/_utils.scss";
-
 $ROTATION_STOPPED: 0deg;
 $ROTATION_PLAYING_START: 24deg;
 $ROTATION_PLAYING_END: 43deg;
 $ARM_LIFT_ANGLE: 15deg;
 $ARM_DROP_ANGLE: 0deg;
 $ARM_STEP_SEC: 0.8s;
-$ROTATION_SPEED_SEC: unquote("#{toFixed(60 / 33)}s"); // RPMs: 78/45/33
+$ROTATION_SPEED_SEC: 1.82s;
 $ROTATION_DURATION: 23s;
 $CENTER_IMG_PCT: 33%;
 
@@ -19,19 +17,15 @@ $CENTER_IMG_PCT: 33%;
   @if ($reversed) {
     $pct: "#{calc(100 - (($desiredSecs / $durationSecs) * 100))}%";
   }
-  @debug "$pct: #{pct}";
   @return unquote($pct);
 }
 
 .container {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
   box-sizing: border-box;
-  align-items: flex-start;
-  height: 800px;
-  width: 1000px;
+  width: min(100%, 920px);
+  aspect-ratio: 1.25 / 1;
+  min-width: 0;
 }
 
 .deck {
@@ -43,7 +37,7 @@ $CENTER_IMG_PCT: 33%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 75px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -188,18 +182,18 @@ $CENTER_IMG_PCT: 33%;
 
 .controls {
   position: absolute;
-  bottom: 75px;
-  right: 50px;
-  height: 50px;
-  width: 250px;
+  bottom: 9%;
+  right: 5%;
+  width: min(25%, 250px);
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  gap: 10px;
 }
 
 .buttons {
-  width: 50px;
-  height: 50px;
+  width: clamp(38px, 5vw, 50px);
+  height: clamp(38px, 5vw, 50px);
   border-radius: 100%;
   padding: 10px 10px;
   text-shadow: 0px -1px 0px rgba(100, 100, 100, 0.4);
@@ -255,7 +249,8 @@ $CENTER_IMG_PCT: 33%;
   .play {
     margin-right: -2px;
   }
-  svg {
+  svg,
+  img {
     height: 15px;
     width: 15px;
   }
