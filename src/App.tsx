@@ -42,6 +42,7 @@ const featuredProjects = [
     description:
       "A privacy-minded shopping list that parses rough grocery notes, groups items by aisle, supports shared lists, and keeps everyday workflows fast.",
     image: "/project-shots/shopping-list.png",
+    darkImage: "/project-shots/shopping-list-dark.png",
     demoUrl: "https://shoppinglist.website",
     repoUrl: "https://github.com/manix84/shopping-list",
     tags: ["TypeScript", "Local-first", "UX systems", "Data parsing"],
@@ -52,6 +53,7 @@ const featuredProjects = [
     description:
       "A no-upload stereogram studio for painting depth maps, tuning repeat patterns, and generating hidden depth images directly in the browser.",
     image: "/project-shots/magiceyelab.png",
+    darkImage: "/project-shots/magiceyelab-dark.png",
     demoUrl: "https://manix84.github.io/magiceyelab/",
     repoUrl: "https://github.com/manix84/magiceyelab",
     tags: ["TypeScript", "Canvas", "Image tools", "Privacy-first"],
@@ -64,6 +66,7 @@ const compactProjects = [
     description:
       "A fast client-side search engine for Little Alchemist 2 combinations.",
     image: "/project-shots/little-alchemist.png",
+    darkImage: "/project-shots/little-alchemist-dark.png",
     demoUrl: "https://manix84.github.io/little-alchemist-2-cheats/",
     repoUrl: "https://github.com/manix84/little-alchemist-2-cheats",
   },
@@ -142,6 +145,33 @@ const ThemeSwitcher = ({
       </button>
     ))}
   </div>
+);
+
+const ProjectScreenshot = ({
+  image,
+  darkImage,
+  alt,
+  className,
+}: {
+  image: string;
+  darkImage?: string;
+  alt: string;
+  className: string;
+}) => (
+  <>
+    <img
+      src={image}
+      alt={alt}
+      className={`${className} ${darkImage ? st.lightProjectImage : ""}`}
+    />
+    {darkImage ? (
+      <img
+        src={darkImage}
+        alt={alt}
+        className={`${className} ${st.darkProjectImage}`}
+      />
+    ) : null}
+  </>
 );
 
 const Home = () => {
@@ -228,8 +258,9 @@ const Home = () => {
                 className={st.projectImageLink}
                 aria-label={`${project.title} live demo`}
               >
-                <img
-                  src={project.image}
+                <ProjectScreenshot
+                  image={project.image}
+                  darkImage={project.darkImage}
                   alt={`${project.title} screenshot`}
                   className={st.projectImage}
                 />
@@ -266,8 +297,9 @@ const Home = () => {
           {compactProjects.map((project) => (
             <article className={st.compactCard} key={project.title}>
               {project.image ? (
-                <img
-                  src={project.image}
+                <ProjectScreenshot
+                  image={project.image}
+                  darkImage={project.darkImage}
                   alt={`${project.title} screenshot`}
                   className={st.compactImage}
                 />
