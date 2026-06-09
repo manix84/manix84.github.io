@@ -78,6 +78,20 @@
     <meta name="msapplication-TileColor" content="#d6fbe0" />
     <meta name="msapplication-TileImage" content="/metaData/mstile-144x144.png" />
     <meta name="theme-color" content="#8cb095" />
+    <script>
+      (() => {
+        const storageKey = "manix84-theme";
+        const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+        const storedTheme = window.localStorage.getItem(storageKey);
+        const preference =
+          storedTheme === "light" || storedTheme === "dark" ? storedTheme : "auto";
+        const resolvedTheme =
+          preference === "auto" ? (systemDark.matches ? "dark" : "light") : preference;
+
+        document.documentElement.dataset.theme = resolvedTheme;
+        document.documentElement.dataset.themePreference = preference;
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

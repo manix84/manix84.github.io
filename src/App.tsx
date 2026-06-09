@@ -5,6 +5,16 @@ import Footer from "../layout/Footer";
 import st from "./App.module.css";
 import componentsStyles from "./Components.module.scss";
 
+type ThemePreference = "light" | "dark" | "auto";
+
+const themePreferences: ThemePreference[] = ["light", "dark", "auto"];
+const themeLabels: Record<ThemePreference, string> = {
+  light: "Light",
+  dark: "Dark",
+  auto: "Auto",
+};
+const themeStorageKey = "manix84-theme";
+
 const featuredProjects = [
   {
     title: "Time Pilot",
@@ -32,6 +42,7 @@ const featuredProjects = [
     description:
       "A privacy-minded shopping list that parses rough grocery notes, groups items by aisle, supports shared lists, and keeps everyday workflows fast.",
     image: "/project-shots/shopping-list.png",
+    darkImage: "/project-shots/shopping-list-dark.png",
     demoUrl: "https://shoppinglist.website",
     repoUrl: "https://github.com/manix84/shopping-list",
     tags: ["TypeScript", "Local-first", "UX systems", "Data parsing"],
@@ -42,6 +53,7 @@ const featuredProjects = [
     description:
       "A no-upload stereogram studio for painting depth maps, tuning repeat patterns, and generating hidden depth images directly in the browser.",
     image: "/project-shots/magiceyelab.png",
+    darkImage: "/project-shots/magiceyelab-dark.png",
     demoUrl: "https://manix84.github.io/magiceyelab/",
     repoUrl: "https://github.com/manix84/magiceyelab",
     tags: ["TypeScript", "Canvas", "Image tools", "Privacy-first"],
@@ -54,6 +66,7 @@ const compactProjects = [
     description:
       "A fast client-side search engine for Little Alchemist 2 combinations.",
     image: "/project-shots/little-alchemist.png",
+    darkImage: "/project-shots/little-alchemist-dark.png",
     demoUrl: "https://manix84.github.io/little-alchemist-2-cheats/",
     repoUrl: "https://github.com/manix84/little-alchemist-2-cheats",
   },
@@ -99,6 +112,67 @@ const experience = [
       "Built customer portals, fan product experiences, and early social web games, covering both product delivery and experimental interactive work.",
   },
 ];
+
+const getSystemTheme = () =>
+  window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+const getStoredThemePreference = (): ThemePreference => {
+  const storedTheme = window.localStorage.getItem(themeStorageKey);
+
+  return storedTheme === "light" || storedTheme === "dark"
+    ? storedTheme
+    : "auto";
+};
+
+const ThemeSwitcher = ({
+  themePreference,
+  onThemeChange,
+}: {
+  themePreference: ThemePreference;
+  onThemeChange: (theme: ThemePreference) => void;
+}) => (
+  <div className={st.themeSwitcher} aria-label="Theme selection" role="group">
+    {themePreferences.map((theme) => (
+      <button
+        key={theme}
+        type="button"
+        aria-pressed={themePreference === theme}
+        className={st.themeButton}
+        data-active={themePreference === theme}
+        onClick={() => onThemeChange(theme)}
+      >
+        {themeLabels[theme]}
+      </button>
+    ))}
+  </div>
+);
+
+const ProjectScreenshot = ({
+  image,
+  darkImage,
+  alt,
+  className,
+}: {
+  image: string;
+  darkImage?: string;
+  alt: string;
+  className: string;
+}) => (
+  <>
+    <img
+      src={image}
+      alt={alt}
+      className={`${className} ${darkImage ? st.lightProjectImage : ""}`}
+    />
+    {darkImage ? (
+      <img
+        src={darkImage}
+        alt={alt}
+        className={`${className} ${st.darkProjectImage}`}
+      />
+    ) : null}
+  </>
+);
 
 const Home = () => {
   useEffect(() => {
@@ -184,8 +258,9 @@ const Home = () => {
                 className={st.projectImageLink}
                 aria-label={`${project.title} live demo`}
               >
-                <img
-                  src={project.image}
+                <ProjectScreenshot
+                  image={project.image}
+                  darkImage={project.darkImage}
                   alt={`${project.title} screenshot`}
                   className={st.projectImage}
                 />
@@ -222,8 +297,9 @@ const Home = () => {
           {compactProjects.map((project) => (
             <article className={st.compactCard} key={project.title}>
               {project.image ? (
-                <img
-                  src={project.image}
+                <ProjectScreenshot
+                  image={project.image}
+                  darkImage={project.darkImage}
                   alt={`${project.title} screenshot`}
                   className={st.compactImage}
                 />
@@ -381,11 +457,60 @@ const getRoute = () => {
 };
 
 const App = () => (
-  <>
-    <Background />
-    {getRoute() === "components" ? <Components /> : <Home />}
-    <Footer />
-  </>
+  <ThemedApp />
 );
+
+const ThemedApp = () => {
+  const [themePreference, setThemePreference] = useState<ThemePreference>(() =>
+    getStoredThemePreference(),
+  );
+
+  useEffect(() => {
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const applyTheme = () => {
+      const resolvedTheme =
+        themePreference === "auto" ? getSystemTheme() : themePreference;
+
+      document.documentElement.dataset.theme = resolvedTheme;
+      document.documentElement.dataset.themePreference = themePreference;
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute(
+          "content",
+          resolvedTheme === "dark" ? "#10252b" : "#8cb095",
+        );
+    };
+
+    applyTheme();
+    systemTheme.addEventListener("change", applyTheme);
+
+    return () => {
+      systemTheme.removeEventListener("change", applyTheme);
+    };
+  }, [themePreference]);
+
+  const handleThemeChange = (nextTheme: ThemePreference) => {
+    setThemePreference(nextTheme);
+
+    if (nextTheme === "auto") {
+      window.localStorage.removeItem(themeStorageKey);
+    } else {
+      window.localStorage.setItem(themeStorageKey, nextTheme);
+    }
+  };
+
+  return (
+    <>
+      <Background />
+      <ThemeSwitcher
+        themePreference={themePreference}
+        onThemeChange={handleThemeChange}
+      />
+      {getRoute() === "components" ? <Components /> : <Home />}
+      <Footer />
+    </>
+  );
+};
 
 export default App;

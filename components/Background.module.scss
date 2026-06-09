@@ -3,12 +3,10 @@
   height: 100%;
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(118deg, rgba(242, 248, 246, 0.96) 0 42%, rgba(223, 238, 233, 0.84) 42% 64%, rgba(246, 239, 226, 0.9) 64% 100%),
-    repeating-linear-gradient(90deg, rgba(16, 37, 43, 0.045) 0 1px, transparent 1px 72px),
-    repeating-linear-gradient(0deg, rgba(16, 37, 43, 0.035) 0 1px, transparent 1px 72px);
+  background: var(--background-base);
   opacity: 1;
   z-index: -2;
+  transition: background 180ms ease;
 }
 
 .container {
@@ -27,7 +25,6 @@
   bottom: 0;
   right: 0;
   z-index: -1;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.7)),
-    linear-gradient(90deg, rgba(24, 100, 93, 0.08), rgba(175, 63, 44, 0.08));
+  background: var(--background-overlay);
+  transition: background 180ms ease;
 }
