@@ -58,7 +58,8 @@ const featuredProjects: FeaturedProject[] = [
     kicker: "Component and game tooling",
     description:
       "A Storybook-backed arcade engine with camera modes, telemetry, controls, and demo scenes for building small web games with repeatable primitives.",
-    image: "/project-shots/arcade-engine.png",
+    image: "/project-shots/arcade-engine.webm",
+    poster: "/project-shots/arcade-engine.png",
     demoUrl: "https://manix84.github.io/arcade-engine/",
     repoUrl: "https://github.com/manix84/arcade-engine",
     tags: ["TypeScript", "Storybook", "3D scenes", "Engine design"],
