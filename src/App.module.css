@@ -257,18 +257,6 @@
   transform: scale(1.025);
 }
 
-.darkProjectImage {
-  display: none;
-}
-
-:global(:root[data-theme="dark"]) .lightProjectImage {
-  display: none;
-}
-
-:global(:root[data-theme="dark"]) .darkProjectImage {
-  display: block;
-}
-
 .projectBody {
   display: flex;
   flex: 1;
@@ -357,6 +345,18 @@
   display: block;
   object-fit: cover;
   object-position: top center;
+}
+
+.darkProjectImage {
+  display: none;
+}
+
+:global(:root[data-theme="dark"]) .lightProjectImage {
+  display: none;
+}
+
+:global(:root[data-theme="dark"]) .darkProjectImage {
+  display: block;
 }
 
 .codePreview {

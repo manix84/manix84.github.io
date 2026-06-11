@@ -1,6 +1,6 @@
 {
   "name": "manix84.github.io",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "precommit": "npm run lint && npm run typecheck && npm test && npm run build:dry-run",
+    "precommit:checks": "npm run lint && npm run typecheck && npm test && npm run build:dry-run",
+    "precommit": "npm run precommit:checks && npm run version:bump",
+    "version:bump": "node scripts/smart-version-bump.mjs",
     "prepare": "node scripts/install-git-hooks.mjs",
     "hooks:install": "node scripts/install-git-hooks.mjs"
   },

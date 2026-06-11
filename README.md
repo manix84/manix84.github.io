@@ -69,6 +69,26 @@ The repository has a local pre-commit workflow and GitHub Actions checks:
 
 The pull request workflow runs linting, type checks, and tests first. The dry-run build waits for those jobs to complete.
 
+## Versioning
+
+The site version starts at `2.0.0` for the second major version of the portfolio. `npm run prepare` installs a local pre-commit hook that runs `npm run precommit`: quality checks first, then `npm run version:bump`.
+
+The version bump script inspects staged changes and skips automatically when `package.json` already has a manually staged version change for the commit. If the manual bump forgot the lockfile, the hook aligns `package-lock.json` to that staged version.
+
+- **minor** for meaningful site content, structure, component, page, HTML, or public asset changes.
+- **patch** for smaller implementation, styling, metadata, script, workflow, config, utility, or test changes.
+- **none** for docs-only changes or version-only staged changes.
+- **major** only when explicitly requested for a mass change of the site's style and structure.
+
+Override the heuristic when needed:
+
+```bash
+SITE_VERSION_BUMP=major git commit
+SITE_VERSION_BUMP=minor git commit
+SITE_VERSION_BUMP=patch git commit
+SITE_VERSION_BUMP=none git commit
+```
+
 ## Deployment
 
 The GitHub Pages release workflow runs when changes merge into `main`. It builds the Vite app, uploads the generated `dist/` output, and deploys it to GitHub Pages.
