@@ -21,7 +21,7 @@ const featuredProjects = [
     kicker: "Playable arcade rebuild",
     description:
       "A TypeScript browser recreation of the 1982 arcade shooter, rebuilt around a reusable arcade engine and packaged as a modern web experience.",
-    image: "/project-shots/time-pilot.png",
+    image: "/project-shots/time-pilot.gif",
     demoUrl: "https://time-pilot.co.uk",
     repoUrl: "https://github.com/manix84/time-pilot",
     tags: ["TypeScript", "Canvas", "PWA", "Game systems"],
@@ -87,6 +87,15 @@ const compactProjects = [
     darkImage: "/project-shots/name-generator-dark.png",
     demoUrl: "https://manix84.github.io/name-generator/",
     repoUrl: "https://github.com/manix84/name-generator",
+  },
+  {
+    title: "ZSH Dotfiles",
+    description:
+      "Personal ZSH and terminal setup files for bootstrapping an OS X or UNIX shell environment with one-step install scripts.",
+    demoUrl: "https://github.com/manix84/dotfiles_zsh/tree/main/auto-install#readme",
+    demoLabel: "Setup docs",
+    repoUrl: "https://github.com/manix84/dotfiles_zsh",
+    repoLabel: "Dotfiles",
   },
   {
     title: "Chrome Utility Extensions",
