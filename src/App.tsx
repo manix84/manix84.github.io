@@ -73,9 +73,11 @@ const compactProjects = [
   {
     title: "Discord GMod Muter",
     description:
-      "A Garry's Mod addon and Discord bot pairing for muting dead TTT players, with 100+ public forks across the companion tools.",
+      "A two-part Garry's Mod and Discord system: the game addon tells the server-hosted bot to mute dead TTT players for timed rounds.",
     demoUrl: "https://github.com/manix84/discord_gmod_bot",
+    demoLabel: "Discord bot",
     repoUrl: "https://github.com/manix84/discord_gmod_addon",
+    repoLabel: "GMod addon",
   },
   {
     title: "Chrome Utility Extensions",
@@ -315,10 +317,10 @@ const Home = () => {
                 <p>{project.description}</p>
                 <div className={st.projectLinks}>
                   <a href={project.demoUrl} target="_blank" rel="noreferrer">
-                    Open
+                    {"demoLabel" in project ? project.demoLabel : "Open"}
                   </a>
                   <a href={project.repoUrl} target="_blank" rel="noreferrer">
-                    Source
+                    {"repoLabel" in project ? project.repoLabel : "Source"}
                   </a>
                 </div>
               </div>
