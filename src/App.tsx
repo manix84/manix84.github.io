@@ -6,6 +6,7 @@ import st from "./App.module.css";
 import componentsStyles from "./Components.module.scss";
 
 type ThemePreference = "light" | "dark" | "auto";
+type ResolvedTheme = "light" | "dark";
 
 const themePreferences: ThemePreference[] = ["light", "dark", "auto"];
 const themeLabels: Record<ThemePreference, string> = {
@@ -175,6 +176,9 @@ const experience = [
 const getSystemTheme = () =>
   window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 
+const getPrefersReducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 const getStoredThemePreference = (): ThemePreference => {
   const storedTheme = window.localStorage.getItem(themeStorageKey);
 
@@ -206,6 +210,33 @@ const ThemeSwitcher = ({
   </div>
 );
 
+const usePrefersReducedMotion = () => {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() =>
+    getPrefersReducedMotion(),
+  );
+
+  useEffect(() => {
+    const motionPreference = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+    const handleMotionPreferenceChange = () => {
+      setPrefersReducedMotion(motionPreference.matches);
+    };
+
+    handleMotionPreferenceChange();
+    motionPreference.addEventListener("change", handleMotionPreferenceChange);
+
+    return () => {
+      motionPreference.removeEventListener(
+        "change",
+        handleMotionPreferenceChange,
+      );
+    };
+  }, []);
+
+  return prefersReducedMotion;
+};
+
 const ProjectScreenshot = ({
   image,
   darkImage,
@@ -213,6 +244,8 @@ const ProjectScreenshot = ({
   darkPoster,
   alt,
   className,
+  resolvedTheme,
+  prefersReducedMotion,
 }: {
   image: string;
   darkImage?: string;
@@ -220,43 +253,37 @@ const ProjectScreenshot = ({
   darkPoster?: string;
   alt: string;
   className: string;
+  resolvedTheme: ResolvedTheme;
+  prefersReducedMotion: boolean;
 }) => {
-  const lightMediaClassName = `${className} ${darkImage ? st.lightProjectImage : ""}`;
-  const renderMedia = (
-    src: string,
-    mediaClassName: string,
-    mediaPoster?: string,
-  ) =>
-    src.endsWith(".webm") ? (
-      <video
-        src={src}
-        poster={mediaPoster}
-        aria-label={alt}
-        className={mediaClassName}
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
-    ) : (
-      <img src={src} alt={alt} className={mediaClassName} />
-    );
+  const useDarkMedia = resolvedTheme === "dark" && darkImage !== undefined;
+  const media = useDarkMedia ? darkImage : image;
+  const mediaPoster = useDarkMedia ? darkPoster : poster;
 
-  return (
-    <>
-      {renderMedia(image, lightMediaClassName, poster)}
-      {darkImage ? (
-        renderMedia(
-          darkImage,
-          `${className} ${st.darkProjectImage}`,
-          darkPoster,
-        )
-      ) : null}
-    </>
+  return media.endsWith(".webm") ? (
+    <video
+      src={media}
+      poster={mediaPoster}
+      aria-label={alt}
+      className={className}
+      autoPlay={!prefersReducedMotion}
+      loop={!prefersReducedMotion}
+      muted
+      playsInline
+      preload="metadata"
+    />
+  ) : (
+    <img src={media} alt={alt} className={className} />
   );
 };
 
-const Home = () => {
+const Home = ({
+  resolvedTheme,
+  prefersReducedMotion,
+}: {
+  resolvedTheme: ResolvedTheme;
+  prefersReducedMotion: boolean;
+}) => {
   useEffect(() => {
     document.title = "Rob Taylor | Lead Full-Stack Engineer";
     document
@@ -271,7 +298,10 @@ const Home = () => {
     <main className={st.page}>
       <section className={st.hero}>
         <div className={st.heroCopy}>
-          <p className={st.eyebrow}>Rob Taylor / manix84</p>
+          <div className={st.identity}>
+            <span className={st.identityAvatar} aria-hidden="true" />
+            <p className={st.eyebrow}>Rob Taylor / manix84</p>
+          </div>
           <h1>Lead full-stack engineer with deep front-end focus.</h1>
           <p className={st.lede}>
             I have spent 25+ years building for the web, growing from hands-on
@@ -295,26 +325,28 @@ const Home = () => {
           </div>
         </div>
 
-        <div className={st.heroPanel} aria-label="Portfolio highlights">
-          <div className={st.metric}>
-            <span>25+</span>
-            <p>years building web products and interfaces</p>
-          </div>
-          <div className={st.metric}>
-            <span>9</span>
-            <p>years on Prime Video UI systems</p>
-          </div>
-          <div className={st.metric}>
-            <span>3.75</span>
-            <p>years across BBC iPlayer and radio</p>
-          </div>
-          <div className={st.focusList}>
-            <p>Current focus</p>
-            <ul>
-              <li>AI tools with transparent user value</li>
-              <li>Full-stack product delivery with front-end depth</li>
-              <li>Privacy-first utilities with no account friction</li>
-            </ul>
+        <div className={st.heroPanelWrap}>
+          <div className={st.heroPanel} aria-label="Portfolio highlights">
+            <div className={st.metric}>
+              <span>25+</span>
+              <p>years building web products and interfaces</p>
+            </div>
+            <div className={st.metric}>
+              <span>9</span>
+              <p>years on Prime Video UI systems</p>
+            </div>
+            <div className={st.metric}>
+              <span>4</span>
+              <p>years across BBC iPlayer, Channels, and Radio</p>
+            </div>
+            <div className={st.focusList}>
+              <p>Current focus</p>
+              <ul>
+                <li>AI tools with transparent user value</li>
+                <li>Full-stack product delivery with front-end depth</li>
+                <li>Privacy-first utilities with no account friction</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -347,6 +379,8 @@ const Home = () => {
                   darkPoster={project.darkPoster}
                   alt={`${project.title} screenshot`}
                   className={st.projectImage}
+                  resolvedTheme={resolvedTheme}
+                  prefersReducedMotion={prefersReducedMotion}
                 />
               </a>
               <div className={st.projectBody}>
@@ -388,6 +422,8 @@ const Home = () => {
                   darkPoster={project.darkPoster}
                   alt={`${project.title} screenshot`}
                   className={st.compactImage}
+                  resolvedTheme={resolvedTheme}
+                  prefersReducedMotion={prefersReducedMotion}
                 />
               ) : (
                 <div className={st.codePreview} aria-hidden="true">
@@ -550,31 +586,43 @@ const ThemedApp = () => {
   const [themePreference, setThemePreference] = useState<ThemePreference>(() =>
     getStoredThemePreference(),
   );
+  const [systemTheme, setSystemTheme] = useState<ResolvedTheme>(() =>
+    getSystemTheme(),
+  );
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const resolvedTheme =
+    themePreference === "auto" ? systemTheme : themePreference;
 
   useEffect(() => {
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const systemThemePreference = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    );
 
-    const applyTheme = () => {
-      const resolvedTheme =
-        themePreference === "auto" ? getSystemTheme() : themePreference;
-
-      document.documentElement.dataset.theme = resolvedTheme;
-      document.documentElement.dataset.themePreference = themePreference;
-      document
-        .querySelector('meta[name="theme-color"]')
-        ?.setAttribute(
-          "content",
-          resolvedTheme === "dark" ? "#10252b" : "#8cb095",
-        );
+    const handleSystemThemeChange = () => {
+      setSystemTheme(systemThemePreference.matches ? "dark" : "light");
     };
 
-    applyTheme();
-    systemTheme.addEventListener("change", applyTheme);
+    handleSystemThemeChange();
+    systemThemePreference.addEventListener("change", handleSystemThemeChange);
 
     return () => {
-      systemTheme.removeEventListener("change", applyTheme);
+      systemThemePreference.removeEventListener(
+        "change",
+        handleSystemThemeChange,
+      );
     };
-  }, [themePreference]);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = resolvedTheme;
+    document.documentElement.dataset.themePreference = themePreference;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute(
+        "content",
+        resolvedTheme === "dark" ? "#10252b" : "#8cb095",
+      );
+  }, [resolvedTheme, themePreference]);
 
   const handleThemeChange = (nextTheme: ThemePreference) => {
     setThemePreference(nextTheme);
@@ -593,7 +641,14 @@ const ThemedApp = () => {
         themePreference={themePreference}
         onThemeChange={handleThemeChange}
       />
-      {getRoute() === "components" ? <Components /> : <Home />}
+      {getRoute() === "components" ? (
+        <Components />
+      ) : (
+        <Home
+          resolvedTheme={resolvedTheme}
+          prefersReducedMotion={prefersReducedMotion}
+        />
+      )}
       <Footer />
     </>
   );
