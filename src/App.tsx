@@ -80,6 +80,15 @@ const compactProjects = [
     repoLabel: "GMod addon",
   },
   {
+    title: "Name Generator",
+    description:
+      "An installable browser app for quickly generating random two-word names, with offline support and light, dark, and auto themes.",
+    image: "/project-shots/name-generator.png",
+    darkImage: "/project-shots/name-generator-dark.png",
+    demoUrl: "https://manix84.github.io/name-generator/",
+    repoUrl: "https://github.com/manix84/name-generator",
+  },
+  {
     title: "Chrome Utility Extensions",
     description:
       "Small focused extensions for screenshots, tab recording, video popout, and picture-in-picture workflows.",
