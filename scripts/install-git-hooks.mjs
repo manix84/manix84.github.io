@@ -13,6 +13,8 @@ const hookContents = `#!/bin/sh
 ${hookMarker}
 set -e
 
+export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
+
 npm run precommit
 `;
 
