@@ -15,13 +15,40 @@ const themeLabels: Record<ThemePreference, string> = {
 };
 const themeStorageKey = "manix84-theme";
 
-const featuredProjects = [
+type ProjectMedia = {
+  image?: string;
+  darkImage?: string;
+  poster?: string;
+  darkPoster?: string;
+};
+
+type FeaturedProject = ProjectMedia & {
+  title: string;
+  kicker: string;
+  description: string;
+  image: string;
+  demoUrl: string;
+  repoUrl: string;
+  tags: string[];
+};
+
+type CompactProject = ProjectMedia & {
+  title: string;
+  description: string;
+  demoUrl: string;
+  demoLabel?: string;
+  repoUrl: string;
+  repoLabel?: string;
+};
+
+const featuredProjects: FeaturedProject[] = [
   {
     title: "Time Pilot",
     kicker: "Playable arcade rebuild",
     description:
       "A TypeScript browser recreation of the 1982 arcade shooter, rebuilt around a reusable arcade engine and packaged as a modern web experience.",
-    image: "/project-shots/time-pilot.png",
+    image: "/project-shots/time-pilot.webm",
+    poster: "/project-shots/time-pilot.png",
     demoUrl: "https://time-pilot.co.uk",
     repoUrl: "https://github.com/manix84/time-pilot",
     tags: ["TypeScript", "Canvas", "PWA", "Game systems"],
@@ -31,7 +58,8 @@ const featuredProjects = [
     kicker: "Component and game tooling",
     description:
       "A Storybook-backed arcade engine with camera modes, telemetry, controls, and demo scenes for building small web games with repeatable primitives.",
-    image: "/project-shots/arcade-engine.png",
+    image: "/project-shots/arcade-engine.webm",
+    poster: "/project-shots/arcade-engine.png",
     demoUrl: "https://manix84.github.io/arcade-engine/",
     repoUrl: "https://github.com/manix84/arcade-engine",
     tags: ["TypeScript", "Storybook", "3D scenes", "Engine design"],
@@ -60,7 +88,16 @@ const featuredProjects = [
   },
 ];
 
-const compactProjects = [
+const compactProjects: CompactProject[] = [
+  {
+    title: "SpectraFlux",
+    description:
+      "A browser audio visualizer with file, microphone, and sample inputs plus switchable spectrum, scope, radial, particle, and abstract views.",
+    image: "/project-shots/spectra-flux.webm",
+    poster: "/project-shots/spectra-flux.png",
+    demoUrl: "https://manix84.github.io/spectra-flux/",
+    repoUrl: "https://github.com/manix84/spectra-flux",
+  },
   {
     title: "Little Alchemist 2 Hints",
     description:
@@ -78,6 +115,26 @@ const compactProjects = [
     demoLabel: "Discord bot",
     repoUrl: "https://github.com/manix84/discord_gmod_addon",
     repoLabel: "GMod addon",
+  },
+  {
+    title: "Name Generator",
+    description:
+      "An installable browser app for quickly generating random two-word names, with offline support and light, dark, and auto themes.",
+    image: "/project-shots/name-generator.webm",
+    darkImage: "/project-shots/name-generator-dark.webm",
+    poster: "/project-shots/name-generator.png",
+    darkPoster: "/project-shots/name-generator-dark.png",
+    demoUrl: "https://manix84.github.io/name-generator/",
+    repoUrl: "https://github.com/manix84/name-generator",
+  },
+  {
+    title: "ZSH Dotfiles",
+    description:
+      "Personal ZSH and terminal setup files for bootstrapping an OS X or UNIX shell environment with one-step install scripts.",
+    demoUrl: "https://github.com/manix84/dotfiles_zsh/tree/main/auto-install#readme",
+    demoLabel: "Setup docs",
+    repoUrl: "https://github.com/manix84/dotfiles_zsh",
+    repoLabel: "Dotfiles",
   },
   {
     title: "Chrome Utility Extensions",
@@ -152,29 +209,52 @@ const ThemeSwitcher = ({
 const ProjectScreenshot = ({
   image,
   darkImage,
+  poster,
+  darkPoster,
   alt,
   className,
 }: {
   image: string;
   darkImage?: string;
+  poster?: string;
+  darkPoster?: string;
   alt: string;
   className: string;
-}) => (
-  <>
-    <img
-      src={image}
-      alt={alt}
-      className={`${className} ${darkImage ? st.lightProjectImage : ""}`}
-    />
-    {darkImage ? (
-      <img
-        src={darkImage}
-        alt={alt}
-        className={`${className} ${st.darkProjectImage}`}
+}) => {
+  const lightMediaClassName = `${className} ${darkImage ? st.lightProjectImage : ""}`;
+  const renderMedia = (
+    src: string,
+    mediaClassName: string,
+    mediaPoster?: string,
+  ) =>
+    src.endsWith(".webm") ? (
+      <video
+        src={src}
+        poster={mediaPoster}
+        aria-label={alt}
+        className={mediaClassName}
+        autoPlay
+        loop
+        muted
+        playsInline
       />
-    ) : null}
-  </>
-);
+    ) : (
+      <img src={src} alt={alt} className={mediaClassName} />
+    );
+
+  return (
+    <>
+      {renderMedia(image, lightMediaClassName, poster)}
+      {darkImage ? (
+        renderMedia(
+          darkImage,
+          `${className} ${st.darkProjectImage}`,
+          darkPoster,
+        )
+      ) : null}
+    </>
+  );
+};
 
 const Home = () => {
   useEffect(() => {
@@ -263,6 +343,8 @@ const Home = () => {
                 <ProjectScreenshot
                   image={project.image}
                   darkImage={project.darkImage}
+                  poster={project.poster}
+                  darkPoster={project.darkPoster}
                   alt={`${project.title} screenshot`}
                   className={st.projectImage}
                 />
@@ -302,6 +384,8 @@ const Home = () => {
                 <ProjectScreenshot
                   image={project.image}
                   darkImage={project.darkImage}
+                  poster={project.poster}
+                  darkPoster={project.darkPoster}
                   alt={`${project.title} screenshot`}
                   className={st.compactImage}
                 />
